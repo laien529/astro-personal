@@ -1,0 +1,30 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import SocialLink from '@/components/ui/SocialLink.astro';
+import { siteConfig } from '@/data/site';
+import { socials } from '@/data/socials';
+---
+
+<section class="section section-tight">
+  <Container>
+    <SectionHeader
+      eyebrow="Contact"
+      title="Get in touch"
+      description="This starter ships with a static contact page. You can keep it simple with email and social links, or later connect it to a form backend."
+    />
+    <div class="contact-grid">
+      <div class="panel">
+        <h3>Email</h3>
+        <p><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></p>
+        <p class="muted">For a static site, a plain mailto link is the fastest path to deployment.</p>
+      </div>
+      <div class="panel">
+        <h3>Social</h3>
+        <div class="social-list vertical">
+          {socials.map((item) => <SocialLink label={item.label} href={item.href} />)}
+        </div>
+      </div>
+    </div>
+  </Container>
+</section>

@@ -1,0 +1,30 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import Button from '@/components/ui/Button.astro';
+import { siteConfig } from '@/data/site';
+---
+
+<section class="section">
+  <Container>
+    <div class="two-column panel">
+      <div>
+        <SectionHeader eyebrow="About" title="Design-first structure, implementation-first decisions" />
+      </div>
+      <div>
+        <p>
+          This starter is designed for people who want a polished site without building a heavy web app. It keeps
+          page structure, reusable sections, and deployment workflow straightforward.
+        </p>
+        <p>
+          Replace the sample content with your own profile, projects, and writing. Keep the layout, or extend it as
+          your site grows.
+        </p>
+        <p class="muted">Based in {siteConfig.location}</p>
+        <div class="button-row">
+          <Button href="/about">Read More</Button>
+        </div>
+      </div>
+    </div>
+  </Container>
+</section>

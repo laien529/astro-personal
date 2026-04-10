@@ -1,0 +1,17 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import HeroSection from '@/components/sections/HeroSection.astro';
+import AboutPreviewSection from '@/components/sections/AboutPreviewSection.astro';
+import FeaturedProjectsSection from '@/components/sections/FeaturedProjectsSection.astro';
+import SkillsSection from '@/components/sections/SkillsSection.astro';
+import ContactCtaSection from '@/components/sections/ContactCtaSection.astro';
+import { siteConfig } from '@/data/site';
+---
+
+<MainLayout title={siteConfig.title} description={siteConfig.description}>
+  <HeroSection />
+  <AboutPreviewSection />
+  <FeaturedProjectsSection />
+  <SkillsSection />
+  <ContactCtaSection />
+</MainLayout>

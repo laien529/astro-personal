@@ -1,0 +1,45 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Tag from '@/components/ui/Tag.astro';
+import Button from '@/components/ui/Button.astro';
+import { formatDate } from '@/utils/format';
+
+interface Props {
+  title: string;
+  description: string;
+  publishDate: string;
+  tech: string[];
+  github?: string;
+  demo?: string;
+}
+
+const { title, description, publishDate, tech, github, demo } = Astro.props;
+---
+
+<MainLayout title={`${title} — Project`} description={description}>
+  <section class="section section-tight">
+    <Container>
+      <div class="project-hero panel">
+        <p class="section-eyebrow">Project</p>
+        <h1>{title}</h1>
+        <p class="lead">{description}</p>
+        <p class="project-meta">Published {formatDate(publishDate)}</p>
+        <div class="tag-list">
+          {tech.map((item) => <Tag text={item} />)}
+        </div>
+        <div class="button-row">
+          {github && (
+            <Button href={github} external={true}>GitHub</Button>
+          )}
+          {demo && (
+            <Button href={demo} variant="secondary" external={true}>Live Demo</Button>
+          )}
+        </div>
+      </div>
+      <article class="project-content panel prose">
+        <slot />
+      </article>
+    </Container>
+  </section>
+</MainLayout>

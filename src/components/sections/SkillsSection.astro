@@ -1,0 +1,15 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import SkillCard from '@/components/cards/SkillCard.astro';
+import { skills } from '@/data/skills';
+---
+
+<section class="section">
+  <Container>
+    <SectionHeader eyebrow="Skills" title="Core capabilities" description="A simple skill grid that you can edit in one file." />
+    <div class="skills-grid">
+      {skills.map((skill) => <SkillCard label={skill} />)}
+    </div>
+  </Container>
+</section>

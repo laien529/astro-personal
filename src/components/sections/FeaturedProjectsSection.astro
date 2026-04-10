@@ -1,0 +1,35 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import ProjectCard from '@/components/cards/ProjectCard.astro';
+import Button from '@/components/ui/Button.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+const projects = allProjects
+  .filter((project) => project.data.featured)
+  .sort((a, b) => Number(new Date(b.data.publishDate)) - Number(new Date(a.data.publishDate)));
+---
+
+<section class="section">
+  <Container>
+    <SectionHeader
+      eyebrow="Projects"
+      title="Featured work"
+      description="A few examples of products, systems, and interfaces built with long-term maintainability in mind."
+    />
+    <div class="project-grid">
+      {projects.map((project) => (
+        <ProjectCard
+          href={`/projects/${project.id}/`}
+          title={project.data.title}
+          summary={project.data.summary}
+          tech={project.data.tech}
+        />
+      ))}
+    </div>
+    <div class="section-footer-action">
+      <Button href="/projects" variant="secondary">See All Projects</Button>
+    </div>
+  </Container>
+</section>

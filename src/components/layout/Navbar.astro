@@ -1,0 +1,26 @@
+---
+import Container from '@/components/ui/Container.astro';
+import { navigation } from '@/data/navigation';
+import { siteConfig } from '@/data/site';
+
+const pathname = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <Container>
+    <div class="site-header-inner">
+      <a class="brand" href="/">{siteConfig.name}</a>
+      <nav aria-label="Primary">
+        <ul class="nav-list">
+          {navigation.map((item) => (
+            <li>
+              <a class:list={["nav-link", pathname === item.href && 'nav-link-active']} href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </Container>
+</header>

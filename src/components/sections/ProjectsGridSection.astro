@@ -1,0 +1,26 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import ProjectCard from '@/components/cards/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => Number(new Date(b.data.publishDate)) - Number(new Date(a.data.publishDate))
+);
+---
+
+<section class="section section-tight">
+  <Container>
+    <SectionHeader eyebrow="Projects" title="All projects" description="Every project comes from a content file, so adding a new entry does not require editing the page itself." />
+    <div class="project-grid">
+      {projects.map((project) => (
+        <ProjectCard
+          href={`/projects/${project.id}/`}
+          title={project.data.title}
+          summary={project.data.summary}
+          tech={project.data.tech}
+        />
+      ))}
+    </div>
+  </Container>
+</section>

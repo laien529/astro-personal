@@ -1,0 +1,15 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import TimelineItem from '@/components/cards/TimelineItem.astro';
+import { timeline } from '@/data/skills';
+---
+
+<section class="section">
+  <Container>
+    <SectionHeader eyebrow="Experience" title="Timeline" />
+    <div class="timeline-grid">
+      {timeline.map((item) => <TimelineItem year={item.year} title={item.title} description={item.description} />)}
+    </div>
+  </Container>
+</section>

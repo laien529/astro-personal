@@ -1,0 +1,22 @@
+---
+import Tag from '@/components/ui/Tag.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  summary: string;
+  tech: string[];
+}
+
+const { href, title, summary, tech } = Astro.props;
+---
+
+<a class="card project-card" href={href}>
+  <div>
+    <h3>{title}</h3>
+    <p>{summary}</p>
+  </div>
+  <div class="tag-list">
+    {tech.map((item) => <Tag text={item} />)}
+  </div>
+</a>

@@ -1,0 +1,31 @@
+---
+import Container from '@/components/ui/Container.astro';
+import Button from '@/components/ui/Button.astro';
+import { siteConfig } from '@/data/site';
+---
+
+<section class="section hero-section">
+  <Container>
+    <div class="hero-grid">
+      <div>
+        <p class="section-eyebrow">Developer Portfolio</p>
+        <h1>{siteConfig.name}</h1>
+        <p class="lead">{siteConfig.role}</p>
+        <p class="hero-copy">{siteConfig.heroIntro}</p>
+        <div class="button-row">
+          <Button href={siteConfig.heroCtaPrimary.href}>{siteConfig.heroCtaPrimary.label}</Button>
+          <Button href={siteConfig.heroCtaSecondary.href} variant="secondary">{siteConfig.heroCtaSecondary.label}</Button>
+        </div>
+      </div>
+      <div class="panel hero-panel">
+        <p class="hero-panel-label">Base Stack</p>
+        <ul class="hero-list">
+          <li>Static-first delivery</li>
+          <li>Reusable components</li>
+          <li>Fast server deployment</li>
+          <li>Simple maintenance path</li>
+        </ul>
+      </div>
+    </div>
+  </Container>
+</section>

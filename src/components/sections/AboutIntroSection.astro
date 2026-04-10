@@ -1,0 +1,24 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+---
+
+<section class="section section-tight">
+  <Container>
+    <SectionHeader
+      eyebrow="About"
+      title="A portfolio template with enough structure to scale"
+      description="Built for developers, designers, and independent creators who want a site that is easy to extend without turning into a framework-heavy app."
+    />
+    <div class="two-column panel">
+      <p>
+        The codebase is organized around pages, reusable sections, and shared UI primitives. This keeps layout updates
+        and content changes predictable.
+      </p>
+      <p>
+        You can add blog pages, case studies, or a CMS later. The first version stays simple: fast pages, clear
+        hierarchy, and a deployment model that works well on your own server.
+      </p>
+    </div>
+  </Container>
+</section>
