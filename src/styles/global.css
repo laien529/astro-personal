@@ -173,9 +173,9 @@ main { min-height: 70vh; }
 .panel,
 .card,
 .skill-card {
-  background: var(--panel);
+  background: #fff;
   border: 1px solid var(--panel-border);
-  border-radius: var(--radius);
+  border-radius: 8px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
 }
@@ -996,8 +996,9 @@ main { min-height: 70vh; }
   align-items: center;
   gap: clamp(1rem, 2.8vw, 2.5rem);
   background: #fff;
-  border: 0;
-  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
   padding: clamp(1.35rem, 3vw, 2rem);
   text-align: left;
   scroll-snap-align: start;
