@@ -11,6 +11,25 @@ const projectStyle = content.backgroundColor ? `--ops-project-bg: ${content.back
 ---
 
 <div class="ops-project" style={projectStyle}>
+  <section class="section ops-title-section" aria-labelledby="ops-project-title">
+    <Container>
+      <div class="ops-title-shell">
+        {content.subtitle && (
+          <p class="ops-title-subtitle">
+            {content.subtitleEn ? <span data-zh={content.subtitle} data-en={content.subtitleEn}>{content.subtitle}</span> : content.subtitle}
+          </p>
+        )}
+        <h1 id="ops-project-title">
+          {content.mainTitleEn ? <span data-zh={content.mainTitle} data-en={content.mainTitleEn}>{content.mainTitle}</span> : content.mainTitle}
+        </h1>
+        {content.intro && (
+          <p class="ops-title-intro">
+            {content.introEn ? <span data-zh={content.intro} data-en={content.introEn}>{content.intro}</span> : content.intro}
+          </p>
+        )}
+      </div>
+    </Container>
+  </section>
   {content.modules.map((module, moduleIndex) => {
     const reversed = moduleIndex % 2 === 1;
     const hasMedia = Boolean(module.backgroundImage);
