@@ -2,14 +2,26 @@
 import Container from '@/components/ui/Container.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import SkillCard from '@/components/cards/SkillCard.astro';
-import { skills } from '@/data/skills';
+import type { SkillsSectionConfig } from '@/data/pageContent';
+
+interface Props {
+  config: SkillsSectionConfig;
+}
+
+const { config } = Astro.props;
+const sectionClass = ['section', config.spacing === 'tight' && 'section-tight'].filter(Boolean).join(' ');
 ---
 
-<section class="section">
+<section class={sectionClass}>
   <Container>
-    <SectionHeader eyebrow="Skills" title="Core capabilities" description="A simple skill grid that you can edit in one file." />
+    <SectionHeader
+      eyebrow={config.header.eyebrow}
+      title={config.header.title}
+      description={config.header.description}
+      align={config.header.align}
+    />
     <div class="skills-grid">
-      {skills.map((skill) => <SkillCard label={skill} />)}
+      {config.items.map((skill) => <SkillCard label={skill} />)}
     </div>
   </Container>
 </section>

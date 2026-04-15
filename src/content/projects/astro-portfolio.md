@@ -2,6 +2,8 @@
 title: "Astro Portfolio Site"
 summary: "A lightweight portfolio and content site built for fast loading, simple maintenance, and clean component reuse."
 publishDate: "2026-02-20"
+cover: "/media/project-astro.svg"
+coverAlt: "Abstract browser layout for an Astro portfolio site"
 tech: ["Astro", "TypeScript", "CSS", "Nginx"]
 featured: true
 github: "https://github.com/yourname/astro-portfolio"

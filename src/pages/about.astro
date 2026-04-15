@@ -3,10 +3,19 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import AboutIntroSection from '@/components/sections/AboutIntroSection.astro';
 import ExperienceTimelineSection from '@/components/sections/ExperienceTimelineSection.astro';
 import SkillsSection from '@/components/sections/SkillsSection.astro';
+import MediaFeatureSection from '@/components/sections/MediaFeatureSection.astro';
+import { pageContent } from '@/data/pageContent';
+
+const page = pageContent.about;
 ---
 
-<MainLayout title="About" description="About this Astro portfolio template">
-  <AboutIntroSection />
-  <ExperienceTimelineSection />
-  <SkillsSection />
+<MainLayout title={page.meta.title} description={page.meta.description}>
+  {page.sections.map((section) => (
+    section.enabled === false ? null :
+    section.type === 'splitText' ? <AboutIntroSection config={section} /> :
+    section.type === 'timeline' ? <ExperienceTimelineSection config={section} /> :
+    section.type === 'skills' ? <SkillsSection config={section} /> :
+    section.type === 'mediaFeature' ? <MediaFeatureSection config={section} /> :
+    null
+  ))}
 </MainLayout>

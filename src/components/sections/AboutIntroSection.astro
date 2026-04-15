@@ -1,24 +1,31 @@
 ---
 import Container from '@/components/ui/Container.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
+import ContentMedia from '@/components/media/ContentMedia.astro';
+import type { SplitTextSectionConfig } from '@/data/pageContent';
+
+interface Props {
+  config: SplitTextSectionConfig;
+}
+
+const { config } = Astro.props;
+const sectionClass = ['section', config.spacing === 'tight' && 'section-tight'].filter(Boolean).join(' ');
 ---
 
-<section class="section section-tight">
+<section class={sectionClass}>
   <Container>
     <SectionHeader
-      eyebrow="About"
-      title="A portfolio template with enough structure to scale"
-      description="Built for developers, designers, and independent creators who want a site that is easy to extend without turning into a framework-heavy app."
+      eyebrow={config.header.eyebrow}
+      title={config.header.title}
+      description={config.header.description}
+      align={config.header.align}
     />
     <div class="two-column panel">
-      <p>
-        The codebase is organized around pages, reusable sections, and shared UI primitives. This keeps layout updates
-        and content changes predictable.
-      </p>
-      <p>
-        You can add blog pages, case studies, or a CMS later. The first version stays simple: fast pages, clear
-        hierarchy, and a deployment model that works well on your own server.
-      </p>
+      <div>
+        {config.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        {config.meta && <p class="muted">{config.meta}</p>}
+      </div>
+      {config.media && <ContentMedia media={config.media} className="section-media" />}
     </div>
   </Container>
 </section>

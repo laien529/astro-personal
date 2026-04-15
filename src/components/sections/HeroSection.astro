@@ -1,31 +1,48 @@
 ---
 import Container from '@/components/ui/Container.astro';
 import Button from '@/components/ui/Button.astro';
-import { siteConfig } from '@/data/site';
+import ContentMedia from '@/components/media/ContentMedia.astro';
+import type { HeroSectionConfig } from '@/data/pageContent';
+
+interface Props {
+  config: HeroSectionConfig;
+}
+
+const { config } = Astro.props;
+const sectionClass = ['section', 'hero-section', config.spacing === 'tight' && 'section-tight']
+  .filter(Boolean)
+  .join(' ');
 ---
 
-<section class="section hero-section">
+<section class={sectionClass}>
   <Container>
     <div class="hero-grid">
       <div>
-        <p class="section-eyebrow">Developer Portfolio</p>
-        <h1>{siteConfig.name}</h1>
-        <p class="lead">{siteConfig.role}</p>
-        <p class="hero-copy">{siteConfig.heroIntro}</p>
-        <div class="button-row">
-          <Button href={siteConfig.heroCtaPrimary.href}>{siteConfig.heroCtaPrimary.label}</Button>
-          <Button href={siteConfig.heroCtaSecondary.href} variant="secondary">{siteConfig.heroCtaSecondary.label}</Button>
+        {config.eyebrow && <p class="section-eyebrow">{config.eyebrow}</p>}
+        <h1>{config.title}</h1>
+        {config.lead && <p class="lead">{config.lead}</p>}
+        {config.body && <p class="hero-copy">{config.body}</p>}
+        {config.actions && (
+          <div class="button-row">
+            {config.actions.map((action) => (
+              <Button href={action.href} variant={action.variant} external={action.external}>{action.label}</Button>
+            ))}
+          </div>
+        )}
+      </div>
+      {(config.panel || config.media) && (
+        <div class="panel hero-panel">
+          {config.panel && (
+            <>
+              {config.panel.label && <p class="hero-panel-label">{config.panel.label}</p>}
+              <ul class="hero-list">
+                {config.panel.items.map((item) => <li>{item}</li>)}
+              </ul>
+            </>
+          )}
+          {config.media && <ContentMedia media={config.media} className="hero-media" />}
         </div>
-      </div>
-      <div class="panel hero-panel">
-        <p class="hero-panel-label">Base Stack</p>
-        <ul class="hero-list">
-          <li>Static-first delivery</li>
-          <li>Reusable components</li>
-          <li>Fast server deployment</li>
-          <li>Simple maintenance path</li>
-        </ul>
-      </div>
+      )}
     </div>
   </Container>
 </section>

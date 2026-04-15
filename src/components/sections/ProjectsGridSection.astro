@@ -3,15 +3,29 @@ import Container from '@/components/ui/Container.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import ProjectCard from '@/components/cards/ProjectCard.astro';
 import { getCollection } from 'astro:content';
+import type { ProjectListSectionConfig } from '@/data/pageContent';
 
-const projects = (await getCollection('projects')).sort(
+interface Props {
+  config: ProjectListSectionConfig;
+}
+
+const { config } = Astro.props;
+const projects = (await getCollection('projects'))
+  .filter((project) => (config.featuredOnly ? project.data.featured : true))
+  .sort(
   (a, b) => Number(new Date(b.data.publishDate)) - Number(new Date(a.data.publishDate))
 );
+const sectionClass = ['section', config.spacing === 'tight' && 'section-tight'].filter(Boolean).join(' ');
 ---
 
-<section class="section section-tight">
+<section class={sectionClass}>
   <Container>
-    <SectionHeader eyebrow="Projects" title="All projects" description="Every project comes from a content file, so adding a new entry does not require editing the page itself." />
+    <SectionHeader
+      eyebrow={config.header.eyebrow}
+      title={config.header.title}
+      description={config.header.description}
+      align={config.header.align}
+    />
     <div class="project-grid">
       {projects.map((project) => (
         <ProjectCard
@@ -19,6 +33,8 @@ const projects = (await getCollection('projects')).sort(
           title={project.data.title}
           summary={project.data.summary}
           tech={project.data.tech}
+          cover={project.data.cover}
+          coverAlt={project.data.coverAlt}
         />
       ))}
     </div>

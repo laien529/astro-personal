@@ -4,19 +4,27 @@ import SectionHeader from '@/components/ui/SectionHeader.astro';
 import ProjectCard from '@/components/cards/ProjectCard.astro';
 import Button from '@/components/ui/Button.astro';
 import { getCollection } from 'astro:content';
+import type { ProjectListSectionConfig } from '@/data/pageContent';
 
+interface Props {
+  config: ProjectListSectionConfig;
+}
+
+const { config } = Astro.props;
 const allProjects = await getCollection('projects');
 const projects = allProjects
-  .filter((project) => project.data.featured)
+  .filter((project) => (config.featuredOnly ? project.data.featured : true))
   .sort((a, b) => Number(new Date(b.data.publishDate)) - Number(new Date(a.data.publishDate)));
+const sectionClass = ['section', config.spacing === 'tight' && 'section-tight'].filter(Boolean).join(' ');
 ---
 
-<section class="section">
+<section class={sectionClass}>
   <Container>
     <SectionHeader
-      eyebrow="Projects"
-      title="Featured work"
-      description="A few examples of products, systems, and interfaces built with long-term maintainability in mind."
+      eyebrow={config.header.eyebrow}
+      title={config.header.title}
+      description={config.header.description}
+      align={config.header.align}
     />
     <div class="project-grid">
       {projects.map((project) => (
@@ -25,11 +33,17 @@ const projects = allProjects
           title={project.data.title}
           summary={project.data.summary}
           tech={project.data.tech}
+          cover={project.data.cover}
+          coverAlt={project.data.coverAlt}
         />
       ))}
     </div>
-    <div class="section-footer-action">
-      <Button href="/projects" variant="secondary">See All Projects</Button>
-    </div>
+    {config.action && (
+      <div class="section-footer-action">
+        <Button href={config.action.href} variant={config.action.variant} external={config.action.external}>
+          {config.action.label}
+        </Button>
+      </div>
+    )}
   </Container>
 </section>

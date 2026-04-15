@@ -1,18 +1,28 @@
 ---
 import Container from '@/components/ui/Container.astro';
 import SocialLink from '@/components/ui/SocialLink.astro';
-import { socials } from '@/data/socials';
+import { siteConfig } from '@/data/site';
+import { getOperatingContactLinks } from '@/utils/operatingContent';
+
+interface Props {
+  hideContactLinks?: boolean;
+}
+
+const { hideContactLinks = false } = Astro.props;
+const contactLinks = getOperatingContactLinks(siteConfig.footer.contactLinks);
 ---
 
 <footer class="site-footer">
   <Container>
     <div class="site-footer-inner">
-      <p>Built with Astro. Adapt this template for your own portfolio or project showcase.</p>
-      <div class="social-list">
-        {socials.map((item) => (
-          <SocialLink label={item.label} href={item.href} />
-        ))}
-      </div>
+      <p>{siteConfig.footer.text}</p>
+      {!hideContactLinks && (
+        <div class="social-list">
+          {contactLinks.map((item) => (
+            <SocialLink label={item.label} labelEn={item.labelEn} href={item.href} />
+          ))}
+        </div>
+      )}
     </div>
   </Container>
 </footer>

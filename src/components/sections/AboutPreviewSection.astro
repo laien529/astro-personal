@@ -2,28 +2,39 @@
 import Container from '@/components/ui/Container.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import Button from '@/components/ui/Button.astro';
-import { siteConfig } from '@/data/site';
+import ContentMedia from '@/components/media/ContentMedia.astro';
+import type { SplitTextSectionConfig } from '@/data/pageContent';
+
+interface Props {
+  config: SplitTextSectionConfig;
+}
+
+const { config } = Astro.props;
+const sectionClass = ['section', config.spacing === 'tight' && 'section-tight'].filter(Boolean).join(' ');
 ---
 
-<section class="section">
+<section class={sectionClass}>
   <Container>
     <div class="two-column panel">
       <div>
-        <SectionHeader eyebrow="About" title="Design-first structure, implementation-first decisions" />
+        <SectionHeader
+          eyebrow={config.header.eyebrow}
+          title={config.header.title}
+          description={config.header.description}
+          align={config.header.align}
+        />
       </div>
       <div>
-        <p>
-          This starter is designed for people who want a polished site without building a heavy web app. It keeps
-          page structure, reusable sections, and deployment workflow straightforward.
-        </p>
-        <p>
-          Replace the sample content with your own profile, projects, and writing. Keep the layout, or extend it as
-          your site grows.
-        </p>
-        <p class="muted">Based in {siteConfig.location}</p>
-        <div class="button-row">
-          <Button href="/about">Read More</Button>
-        </div>
+        {config.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        {config.meta && <p class="muted">{config.meta}</p>}
+        {config.media && <ContentMedia media={config.media} className="section-media" />}
+        {config.actions && (
+          <div class="button-row">
+            {config.actions.map((action) => (
+              <Button href={action.href} variant={action.variant} external={action.external}>{action.label}</Button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   </Container>

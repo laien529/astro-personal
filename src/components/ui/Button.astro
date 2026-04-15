@@ -6,9 +6,10 @@ interface Props {
 }
 
 const { href, variant = 'primary', external = false } = Astro.props;
+const opensNewTab = external || href.startsWith('http');
 const classes = variant === 'primary' ? 'btn btn-primary' : 'btn btn-secondary';
 ---
 
-<a class={classes} href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>
+<a class={classes} href={href} target={opensNewTab ? '_blank' : undefined} rel={opensNewTab ? 'noreferrer' : undefined}>
   <slot />
 </a>

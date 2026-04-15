@@ -17,7 +17,7 @@ astro-portfolio-template/
 │  │  ├─ sections/            # Page sections mapped from the design
 │  │  └─ ui/                  # Basic UI primitives
 │  ├─ content/                # Project content collection
-│  ├─ data/                   # Shared content and config
+│  ├─ data/                   # Shared content, theme, resource, and page config
 │  ├─ layouts/                # Shared page shells
 │  ├─ pages/                  # File-based routes
 │  ├─ styles/                 # Global styles
@@ -90,6 +90,12 @@ Each project uses this frontmatter shape:
 title: "Project title"
 summary: "One-paragraph summary"
 publishDate: "2026-01-01"
+cover: "/media/project-cover.jpg"
+coverAlt: "Project cover description"
+video:
+  src: "/media/project-demo.mp4"
+  title: "Project demo video"
+  poster: "/media/video-poster.svg"
 tech: ["Astro", "TypeScript"]
 featured: true
 github: "https://github.com/..."
@@ -100,7 +106,19 @@ demo: "https://example.com/..."
 ## Data files
 
 ### `src/data/site.ts`
-Site identity, title, hero copy, contact email, and CTA labels.
+Site identity, title, description, contact email, location, hero intro, and footer copy.
+
+### `src/data/theme.ts`
+Theme color tokens read from the currently active style.
+
+### `src/data/styles.ts`
+Style registry and active style switch. Includes the original portfolio style and the Apple-inspired product style.
+
+### `src/data/assets.ts`
+Favicon, brand icon, images, video posters, and video resource paths.
+
+### `src/data/pageContent.ts`
+Page metadata, section order, section enable flags, section copy, buttons, and media references.
 
 ### `src/data/navigation.ts`
 Top navigation items.

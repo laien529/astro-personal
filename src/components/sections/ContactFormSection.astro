@@ -2,29 +2,37 @@
 import Container from '@/components/ui/Container.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import SocialLink from '@/components/ui/SocialLink.astro';
-import { siteConfig } from '@/data/site';
-import { socials } from '@/data/socials';
+import type { ContactSectionConfig } from '@/data/pageContent';
+
+interface Props {
+  config: ContactSectionConfig;
+}
+
+const { config } = Astro.props;
+const sectionClass = ['section', config.spacing === 'tight' && 'section-tight'].filter(Boolean).join(' ');
 ---
 
-<section class="section section-tight">
+<section class={sectionClass}>
   <Container>
     <SectionHeader
-      eyebrow="Contact"
-      title="Get in touch"
-      description="This starter ships with a static contact page. You can keep it simple with email and social links, or later connect it to a form backend."
+      eyebrow={config.header.eyebrow}
+      title={config.header.title}
+      description={config.header.description}
+      align={config.header.align}
     />
     <div class="contact-grid">
-      <div class="panel">
-        <h3>Email</h3>
-        <p><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></p>
-        <p class="muted">For a static site, a plain mailto link is the fastest path to deployment.</p>
-      </div>
-      <div class="panel">
-        <h3>Social</h3>
-        <div class="social-list vertical">
-          {socials.map((item) => <SocialLink label={item.label} href={item.href} />)}
+      {config.cards.map((card) => (
+        <div class="panel">
+          <h3>{card.title}</h3>
+          {card.link && <p><a href={card.link.href}>{card.link.label}</a></p>}
+          {card.body && <p class="muted">{card.body}</p>}
+          {card.links && (
+            <div class="social-list vertical">
+              {card.links.map((item) => <SocialLink label={item.label} href={item.href} external={item.external} />)}
+            </div>
+          )}
         </div>
-      </div>
+      ))}
     </div>
   </Container>
 </section>

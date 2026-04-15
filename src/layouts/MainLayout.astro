@@ -2,26 +2,51 @@
 import Navbar from '@/components/layout/Navbar.astro';
 import Footer from '@/components/layout/Footer.astro';
 import SeoHead from '@/components/layout/SeoHead.astro';
+import { siteConfig } from '@/data/site';
+import { getStyleClass, getStyleName, getThemeCss } from '@/utils/theme';
 import '@/styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
+  navItems?: {
+    label: string;
+    labelEn?: string;
+    href: string;
+  }[];
+  language?: string;
+  showLanguageToggle?: boolean;
+  showHeaderContacts?: boolean;
+  hideFooterContacts?: boolean;
+  bodyStyle?: string;
 }
 
-const { title, description } = Astro.props;
+const {
+  title,
+  description,
+  navItems,
+  language = siteConfig.language,
+  showLanguageToggle = false,
+  showHeaderContacts = false,
+  hideFooterContacts = false,
+  bodyStyle
+} = Astro.props;
+const themeCss = getThemeCss();
+const styleClass = getStyleClass();
+const styleName = getStyleName();
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={language}>
   <head>
     <SeoHead title={title} description={description} />
+    <style is:inline set:html={themeCss}></style>
   </head>
-  <body>
-    <Navbar />
+  <body class={styleClass} data-style={styleName} style={bodyStyle}>
+    <Navbar navItems={navItems} showLanguageToggle={showLanguageToggle} showHeaderContacts={showHeaderContacts} />
     <main>
       <slot />
     </main>
-    <Footer />
+    <Footer hideContactLinks={hideFooterContacts} />
   </body>
 </html>

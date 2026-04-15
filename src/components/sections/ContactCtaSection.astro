@@ -1,19 +1,29 @@
 ---
 import Container from '@/components/ui/Container.astro';
 import Button from '@/components/ui/Button.astro';
-import { siteConfig } from '@/data/site';
+import type { CtaSectionConfig } from '@/data/pageContent';
+
+interface Props {
+  config: CtaSectionConfig;
+}
+
+const { config } = Astro.props;
+const sectionClass = ['section', config.spacing === 'tight' && 'section-tight'].filter(Boolean).join(' ');
 ---
 
-<section class="section">
+<section class={sectionClass}>
   <Container>
     <div class="cta-box panel">
-      <p class="section-eyebrow">Contact</p>
-      <h2>Need a landing page, portfolio, or product showcase?</h2>
-      <p>Use this project as a clean base, then swap in your own brand, content, and deployment settings.</p>
-      <div class="button-row">
-        <Button href={`mailto:${siteConfig.email}`}>Email Me</Button>
-        <Button href="/contact" variant="secondary">Contact Page</Button>
-      </div>
+      {config.eyebrow && <p class="section-eyebrow">{config.eyebrow}</p>}
+      <h2>{config.title}</h2>
+      {config.body && <p>{config.body}</p>}
+      {config.actions && (
+        <div class="button-row">
+          {config.actions.map((action) => (
+            <Button href={action.href} variant={action.variant} external={action.external}>{action.label}</Button>
+          ))}
+        </div>
+      )}
     </div>
   </Container>
 </section>

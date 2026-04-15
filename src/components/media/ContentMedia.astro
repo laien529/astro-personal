@@ -1,0 +1,35 @@
+---
+import type { MediaResource } from '@/data/assets';
+
+interface Props {
+  media: MediaResource;
+  className?: string;
+}
+
+const { media, className = '' } = Astro.props;
+const classes = ['media-frame', className].filter(Boolean).join(' ');
+const shouldRenderVideo = media.type === 'video' && media.src;
+---
+
+{media.type === 'image' && (
+  <figure class={classes}>
+    <img src={media.src} alt={media.alt} loading="lazy" />
+    {media.caption && <figcaption>{media.caption}</figcaption>}
+  </figure>
+)}
+
+{shouldRenderVideo && media.type === 'video' && (
+  <figure class={classes}>
+    <video
+      src={media.src}
+      title={media.title}
+      poster={media.poster}
+      controls={media.controls ?? true}
+      autoplay={media.autoplay}
+      loop={media.loop}
+      muted={media.muted}
+      playsinline
+    />
+    {media.caption && <figcaption>{media.caption}</figcaption>}
+  </figure>
+)}

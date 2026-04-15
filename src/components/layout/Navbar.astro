@@ -2,25 +2,98 @@
 import Container from '@/components/ui/Container.astro';
 import { navigation } from '@/data/navigation';
 import { siteConfig } from '@/data/site';
+import { assetConfig } from '@/data/assets';
+import SocialLink from '@/components/ui/SocialLink.astro';
+import { getOperatingContactLinks } from '@/utils/operatingContent';
+
+interface Props {
+  navItems?: {
+    label: string;
+    labelEn?: string;
+    href: string;
+  }[];
+  showLanguageToggle?: boolean;
+  showHeaderContacts?: boolean;
+}
 
 const pathname = Astro.url.pathname;
+const { navItems = navigation, showLanguageToggle = false, showHeaderContacts = false } = Astro.props;
+const contactLinks = getOperatingContactLinks(siteConfig.footer.contactLinks);
 ---
 
 <header class="site-header">
   <Container>
     <div class="site-header-inner">
-      <a class="brand" href="/">{siteConfig.name}</a>
+      <div class="brand-stack">
+        <a class="brand" href="/">
+          {assetConfig.icons.brand && <img class="brand-icon" src={assetConfig.icons.brand} alt="" />}
+          <span>{siteConfig.name}</span>
+        </a>
+        {showHeaderContacts && (
+          <>
+            <span class="contact-pointer" aria-hidden="true">
+              <svg viewBox="0 0 36 20" focusable="false">
+                <path d="M2 10h21.6" />
+                <path d="M18.4 4.2 26 10l-7.6 5.8" />
+                <path d="M27.4 4.8c2.4.4 4.2 2.5 4.2 5.2s-1.8 4.8-4.2 5.2" />
+              </svg>
+            </span>
+            <div class="header-social-list" aria-label="联系方式">
+              {contactLinks.map((item) => (
+                <SocialLink label={item.label} labelEn={item.labelEn} href={item.href} />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
       <nav aria-label="Primary">
         <ul class="nav-list">
-          {navigation.map((item) => (
+          {navItems.map((item) => (
             <li>
               <a class:list={["nav-link", pathname === item.href && 'nav-link-active']} href={item.href}>
-                {item.label}
+                {item.labelEn ? <span data-zh={item.label} data-en={item.labelEn}>{item.label}</span> : item.label}
               </a>
             </li>
           ))}
+          {showLanguageToggle && (
+            <li>
+              <button class="language-toggle" type="button" data-language-toggle>
+                <span data-lang-zh>中文</span>
+                <span aria-hidden="true">/</span>
+                <span data-lang-en>EN</span>
+              </button>
+            </li>
+          )}
         </ul>
       </nav>
     </div>
   </Container>
 </header>
+
+{showLanguageToggle && (
+  <script is:inline>
+    (() => {
+      const button = document.querySelector('[data-language-toggle]');
+      if (!button) return;
+
+      const applyLanguage = (language) => {
+        document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
+        document.body.dataset.language = language;
+        button.setAttribute('aria-label', language === 'en' ? 'Switch to Chinese' : '切换到英文');
+        button.querySelector('[data-lang-zh]')?.classList.toggle('active', language !== 'en');
+        button.querySelector('[data-lang-en]')?.classList.toggle('active', language === 'en');
+        document.querySelectorAll('[data-zh][data-en]').forEach((node) => {
+          node.textContent = language === 'en' ? node.dataset.en : node.dataset.zh;
+        });
+      };
+
+      let language = localStorage.getItem('site-language') || 'zh';
+      applyLanguage(language);
+      button.addEventListener('click', () => {
+        language = language === 'en' ? 'zh' : 'en';
+        localStorage.setItem('site-language', language);
+        applyLanguage(language);
+      });
+    })();
+  </script>
+)}

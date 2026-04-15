@@ -2,6 +2,8 @@
 title: "Message Filter Tool"
 summary: "A productivity tool that helps users distinguish important messages from noisy streams through visual hierarchy and filtering rules."
 publishDate: "2026-03-10"
+cover: "/media/project-filter.svg"
+coverAlt: "Abstract message filtering workflow"
 tech: ["Kotlin", "Android", "SQLite", "UI Architecture"]
 featured: false
 github: "https://github.com/yourname/message-filter-tool"

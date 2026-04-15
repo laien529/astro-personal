@@ -1,0 +1,41 @@
+{
+  "mainTitle": "Cheng Keying",
+  "subtitle": "iOS / Android / Frontend Engineer",
+  "intro": "I build user-focused apps and polished interfaces, with an emphasis on clear architecture, performance, and maintainable systems.",
+  "modules": [
+    {
+      "title": "Featured work",
+      "intro": "A few examples of products, systems, and interfaces built with long-term maintainability in mind.",
+      "backgroundImage": "/user-content/modules/module-01/background.svg",
+      "items": [
+        {
+          "title": "Astro Portfolio Site",
+          "intro": "A lightweight portfolio and content site built for fast loading, simple maintenance, and clean component reuse."
+        },
+        {
+          "title": "Mobile Design System",
+          "intro": "A reusable design system for mobile products with a strong focus on consistency, performance, and team-wide adoption."
+        },
+        {
+          "title": "Message Filter Tool",
+          "intro": "A productivity tool that helps users distinguish important messages from noisy streams through visual hierarchy and filtering rules."
+        }
+      ]
+    },
+    {
+      "title": "Core capabilities",
+      "intro": "A practical set of engineering capabilities for shipping clear, maintainable products.",
+      "backgroundImage": "/user-content/modules/module-02/background.svg",
+      "items": [
+        {
+          "title": "Mobile architecture",
+          "intro": "iOS, Android, UI architecture, design systems, and product delivery."
+        },
+        {
+          "title": "Frontend systems",
+          "intro": "Astro, TypeScript, reusable sections, fast static delivery, and deployment workflow."
+        }
+      ]
+    }
+  ]
+}

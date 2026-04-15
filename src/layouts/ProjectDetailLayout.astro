@@ -3,6 +3,9 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import Tag from '@/components/ui/Tag.astro';
 import Button from '@/components/ui/Button.astro';
+import ContentMedia from '@/components/media/ContentMedia.astro';
+import { pageContent } from '@/data/pageContent';
+import type { MediaResource } from '@/data/assets';
 import { formatDate } from '@/utils/format';
 
 interface Props {
@@ -12,31 +15,57 @@ interface Props {
   tech: string[];
   github?: string;
   demo?: string;
+  cover?: string;
+  coverAlt?: string;
+  video?: {
+    src: string;
+    title?: string;
+    poster?: string;
+  };
 }
 
-const { title, description, publishDate, tech, github, demo } = Astro.props;
+const { title, description, publishDate, tech, github, demo, cover, coverAlt, video } = Astro.props;
+const projectCopy = pageContent.projectDetail;
+const coverMedia: MediaResource | undefined = cover
+  ? {
+      type: 'image',
+      src: cover,
+      alt: coverAlt ?? ''
+    }
+  : undefined;
+const videoMedia: MediaResource | undefined = video?.src
+  ? {
+      type: 'video',
+      src: video.src,
+      title: video.title ?? title,
+      poster: video.poster,
+      controls: true
+    }
+  : undefined;
 ---
 
-<MainLayout title={`${title} — Project`} description={description}>
+<MainLayout title={`${title} — ${projectCopy.titleSuffix}`} description={description}>
   <section class="section section-tight">
     <Container>
       <div class="project-hero panel">
-        <p class="section-eyebrow">Project</p>
+        <p class="section-eyebrow">{projectCopy.eyebrow}</p>
         <h1>{title}</h1>
         <p class="lead">{description}</p>
-        <p class="project-meta">Published {formatDate(publishDate)}</p>
+        <p class="project-meta">{projectCopy.publishedLabel} {formatDate(publishDate)}</p>
+        {coverMedia && <ContentMedia media={coverMedia} className="project-hero-media" />}
         <div class="tag-list">
           {tech.map((item) => <Tag text={item} />)}
         </div>
         <div class="button-row">
           {github && (
-            <Button href={github} external={true}>GitHub</Button>
+            <Button href={github} external={true}>{projectCopy.githubLabel}</Button>
           )}
           {demo && (
-            <Button href={demo} variant="secondary" external={true}>Live Demo</Button>
+            <Button href={demo} variant="secondary" external={true}>{projectCopy.demoLabel}</Button>
           )}
         </div>
       </div>
+      {videoMedia && <ContentMedia media={videoMedia} className="project-content-media" />}
       <article class="project-content panel prose">
         <slot />
       </article>

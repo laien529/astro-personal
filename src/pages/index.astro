@@ -1,17 +1,31 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
-import HeroSection from '@/components/sections/HeroSection.astro';
-import AboutPreviewSection from '@/components/sections/AboutPreviewSection.astro';
-import FeaturedProjectsSection from '@/components/sections/FeaturedProjectsSection.astro';
-import SkillsSection from '@/components/sections/SkillsSection.astro';
-import ContactCtaSection from '@/components/sections/ContactCtaSection.astro';
-import { siteConfig } from '@/data/site';
+import OperatingHomeSection from '@/components/sections/OperatingHomeSection.astro';
+import { getOperatingContent } from '@/utils/operatingContent';
+
+const content = getOperatingContent();
+const navItems = [
+  { label: '首页', labelEn: 'Home', href: '/' },
+  ...content.modules.map((module, index) => ({
+    label: module.title,
+    href: `#module-${index + 1}`
+  }))
+];
+const projectBackground = content.backgroundColor?.trim();
+const bodyStyle = projectBackground
+  ? `--ops-project-bg: ${projectBackground}; background: ${projectBackground};`
+  : '--ops-project-bg: transparent; background: Canvas;';
 ---
 
-<MainLayout title={siteConfig.title} description={siteConfig.description}>
-  <HeroSection />
-  <AboutPreviewSection />
-  <FeaturedProjectsSection />
-  <SkillsSection />
-  <ContactCtaSection />
+<MainLayout
+  title={content.mainTitle}
+  description={content.intro}
+  navItems={navItems}
+  language="zh-CN"
+  showLanguageToggle={true}
+  showHeaderContacts={true}
+  hideFooterContacts={true}
+  bodyStyle={bodyStyle}
+>
+  <OperatingHomeSection content={content} />
 </MainLayout>

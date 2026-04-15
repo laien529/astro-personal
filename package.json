@@ -8,7 +8,11 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "oneclick": "bash deploy/one_click.sh",
+    "config:studio": "node tools/config-studio/server.mjs",
+    "deploy:local": "bash deploy/one_click.sh local",
+    "deploy:remote": "bash deploy/one_click.sh remote"
   },
   "dependencies": {
     "astro": "^6.0.0"

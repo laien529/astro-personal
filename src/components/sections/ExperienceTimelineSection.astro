@@ -2,14 +2,26 @@
 import Container from '@/components/ui/Container.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import TimelineItem from '@/components/cards/TimelineItem.astro';
-import { timeline } from '@/data/skills';
+import type { TimelineSectionConfig } from '@/data/pageContent';
+
+interface Props {
+  config: TimelineSectionConfig;
+}
+
+const { config } = Astro.props;
+const sectionClass = ['section', config.spacing === 'tight' && 'section-tight'].filter(Boolean).join(' ');
 ---
 
-<section class="section">
+<section class={sectionClass}>
   <Container>
-    <SectionHeader eyebrow="Experience" title="Timeline" />
+    <SectionHeader
+      eyebrow={config.header.eyebrow}
+      title={config.header.title}
+      description={config.header.description}
+      align={config.header.align}
+    />
     <div class="timeline-grid">
-      {timeline.map((item) => <TimelineItem year={item.year} title={item.title} description={item.description} />)}
+      {config.items.map((item) => <TimelineItem year={item.year} title={item.title} description={item.description} />)}
     </div>
   </Container>
 </section>

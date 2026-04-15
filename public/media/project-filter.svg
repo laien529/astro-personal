@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" fill="none">
+  <rect width="960" height="600" rx="30" fill="#F5FAF9"/>
+  <rect x="124" y="98" width="712" height="404" rx="30" fill="white" stroke="#0F766E" stroke-opacity="0.14" stroke-width="2"/>
+  <rect x="178" y="154" width="604" height="64" rx="22" fill="#DFF7F3"/>
+  <rect x="178" y="250" width="604" height="64" rx="22" fill="#F7FCFB" stroke="#0F766E" stroke-opacity="0.1"/>
+  <rect x="178" y="346" width="604" height="64" rx="22" fill="#F7FCFB" stroke="#0F766E" stroke-opacity="0.1"/>
+  <circle cx="226" cy="186" r="18" fill="#149F95"/>
+  <circle cx="226" cy="282" r="18" fill="#149F95" opacity="0.45"/>
+  <circle cx="226" cy="378" r="18" fill="#149F95" opacity="0.28"/>
+  <rect x="272" y="175" width="220" height="18" rx="9" fill="#12202B" opacity="0.18"/>
+  <rect x="272" y="271" width="320" height="18" rx="9" fill="#12202B" opacity="0.12"/>
+  <rect x="272" y="367" width="268" height="18" rx="9" fill="#12202B" opacity="0.1"/>
+  <path d="M682 158L752 158L724 192V216L710 226V192L682 158Z" fill="#0F766E" opacity="0.76"/>
+</svg>

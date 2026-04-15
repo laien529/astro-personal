@@ -1,0 +1,39 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import OperatingHomeSection from '@/components/sections/OperatingHomeSection.astro';
+import { getOperatingContent, getOperatingProjectPaths } from '@/utils/operatingContent';
+
+export function getStaticPaths() {
+  return getOperatingProjectPaths().map((projectPath) => ({
+    params: { projectPath }
+  }));
+}
+
+const { projectPath } = Astro.params;
+const content = getOperatingContent(projectPath);
+const projectRoot = `/${content.path}/`;
+const navItems = [
+  { label: '首页', labelEn: 'Home', href: projectRoot },
+  ...content.modules.map((module, index) => ({
+    label: module.title,
+    href: `#module-${index + 1}`
+  }))
+];
+const projectBackground = content.backgroundColor?.trim();
+const bodyStyle = projectBackground
+  ? `--ops-project-bg: ${projectBackground}; background: ${projectBackground};`
+  : '--ops-project-bg: transparent; background: Canvas;';
+---
+
+<MainLayout
+  title={content.mainTitle}
+  description={content.intro}
+  navItems={navItems}
+  language="zh-CN"
+  showLanguageToggle={true}
+  showHeaderContacts={true}
+  hideFooterContacts={true}
+  bodyStyle={bodyStyle}
+>
+  <OperatingHomeSection content={content} />
+</MainLayout>

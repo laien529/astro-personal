@@ -1,8 +1,15 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import ContactFormSection from '@/components/sections/ContactFormSection.astro';
+import { pageContent } from '@/data/pageContent';
+
+const page = pageContent.contact;
 ---
 
-<MainLayout title="Contact" description="Contact page for the portfolio starter">
-  <ContactFormSection />
+<MainLayout title={page.meta.title} description={page.meta.description}>
+  {page.sections.map((section) => (
+    section.enabled === false ? null :
+    section.type === 'contact' ? <ContactFormSection config={section} /> :
+    null
+  ))}
 </MainLayout>

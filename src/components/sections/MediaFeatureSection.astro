@@ -1,0 +1,38 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import Button from '@/components/ui/Button.astro';
+import ContentMedia from '@/components/media/ContentMedia.astro';
+import type { MediaFeatureSectionConfig } from '@/data/pageContent';
+
+interface Props {
+  config: MediaFeatureSectionConfig;
+}
+
+const { config } = Astro.props;
+const sectionClass = ['section', config.spacing === 'tight' && 'section-tight'].filter(Boolean).join(' ');
+---
+
+<section class={sectionClass}>
+  <Container>
+    <div class="two-column panel">
+      <div>
+        <SectionHeader
+          eyebrow={config.header.eyebrow}
+          title={config.header.title}
+          description={config.header.description}
+          align={config.header.align}
+        />
+        {config.body && <p>{config.body}</p>}
+        {config.actions && (
+          <div class="button-row">
+            {config.actions.map((action) => (
+              <Button href={action.href} variant={action.variant} external={action.external}>{action.label}</Button>
+            ))}
+          </div>
+        )}
+      </div>
+      <ContentMedia media={config.media} className="section-media" />
+    </div>
+  </Container>
+</section>

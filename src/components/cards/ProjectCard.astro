@@ -6,12 +6,15 @@ interface Props {
   title: string;
   summary: string;
   tech: string[];
+  cover?: string;
+  coverAlt?: string;
 }
 
-const { href, title, summary, tech } = Astro.props;
+const { href, title, summary, tech, cover, coverAlt } = Astro.props;
 ---
 
 <a class="card project-card" href={href}>
+  {cover && <img class="project-card-cover" src={cover} alt={coverAlt ?? ''} loading="lazy" />}
   <div>
     <h3>{title}</h3>
     <p>{summary}</p>

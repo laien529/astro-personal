@@ -1,0 +1,143 @@
+{
+  "defaultProjectPath": "chengkeying",
+  "contactLinks": [
+    {
+      "label": "邮箱",
+      "labelEn": "Email",
+      "href": "mailto:hello@example.com"
+    },
+    {
+      "label": "GitHub",
+      "labelEn": "GitHub",
+      "href": "https://github.com/yourname"
+    },
+    {
+      "label": "LinkedIn",
+      "labelEn": "LinkedIn",
+      "href": "https://www.linkedin.com/in/yourname"
+    },
+    {
+      "label": "小红书",
+      "labelEn": "xhs",
+      "href": "https://www.xiaohongshu.com"
+    },
+    {
+      "label": "抖音",
+      "labelEn": "douyin",
+      "href": "https://www.douyin.com/"
+    }
+  ],
+  "projects": [
+    {
+      "projectName": "Cheng Keying",
+      "path": "chengkeying",
+      "backgroundColor": "",
+      "mainTitle": "Cheng Keying",
+      "mainTitleEn": "",
+      "subtitle": "iOS / Android / Frontend Engineer",
+      "subtitleEn": "",
+      "intro": "I build user-focused apps and polished interfaces, with an emphasis on clear architecture, performance, and maintainable systems.",
+      "introEn": "",
+      "modules": [
+        {
+          "title": "Featured work",
+          "titleEn": "",
+          "intro": "A few examples of products, systems, and interfaces built with long-term maintainability in mind.",
+          "introEn": "",
+          "backgroundImage": "/user-content/projects/chengkeying/modules/module-01/background.svg",
+          "items": [
+            {
+              "title": "Astro Portfolio Site",
+              "titleEn": "",
+              "intro": "A lightweight portfolio and content site built for fast loading, simple maintenance, and clean component reuse.",
+              "introEn": ""
+            },
+            {
+              "title": "Mobile Design System",
+              "titleEn": "",
+              "intro": "A reusable design system for mobile products with a strong focus on consistency, performance, and team-wide adoption.",
+              "introEn": ""
+            },
+            {
+              "title": "Message Filter Tool",
+              "titleEn": "",
+              "intro": "A productivity tool that helps users distinguish important messages from noisy streams through visual hierarchy and filtering rules.",
+              "introEn": ""
+            }
+          ]
+        },
+        {
+          "title": "Core capabilities",
+          "titleEn": "",
+          "intro": "A practical set of engineering capabilities for shipping clear, maintainable products.",
+          "introEn": "",
+          "backgroundImage": "/user-content/projects/chengkeying/modules/module-02/background.svg",
+          "items": [
+            {
+              "title": "Mobile architecture",
+              "titleEn": "",
+              "intro": "iOS, Android, UI architecture, design systems, and product delivery.",
+              "introEn": ""
+            },
+            {
+              "title": "Frontend systems",
+              "titleEn": "",
+              "intro": "Astro, TypeScript, reusable sections, fast static delivery, and deployment workflow.",
+              "introEn": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "projectName": "Cedric Cheng",
+      "path": "cc",
+      "backgroundColor": "",
+      "mainTitle": "Cedric Cheng",
+      "mainTitleEn": "",
+      "subtitle": "无所不能",
+      "subtitleEn": "",
+      "intro": "爱拼才会赢",
+      "introEn": "",
+      "modules": [
+        {
+          "title": "新模块",
+          "titleEn": "",
+          "intro": "填写模块介绍。",
+          "introEn": "",
+          "backgroundImage": "",
+          "items": []
+        }
+      ]
+    },
+    {
+      "projectName": "长沙飞毛腿",
+      "path": "fmt",
+      "backgroundColor": "",
+      "mainTitle": "长沙飞毛腿",
+      "mainTitleEn": "",
+      "subtitle": "干啥啥行",
+      "subtitleEn": "",
+      "intro": "有胆你就来",
+      "introEn": "",
+      "modules": [
+        {
+          "title": "关于我",
+          "titleEn": "",
+          "intro": "填写模块介绍。",
+          "introEn": "",
+          "backgroundImage": "/user-content/projects/fmt/modules/module-01/background.jpg",
+          "items": []
+        },
+        {
+          "title": "作品介绍",
+          "titleEn": "",
+          "intro": "填写模块介绍。",
+          "introEn": "",
+          "backgroundImage": "/user-content/projects/fmt/modules/module-02/background.webp",
+          "items": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,15 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import ProjectsGridSection from '@/components/sections/ProjectsGridSection.astro';
+import { pageContent } from '@/data/pageContent';
+
+const page = pageContent.projects;
 ---
 
-<MainLayout title="Projects" description="Project archive">
-  <ProjectsGridSection />
+<MainLayout title={page.meta.title} description={page.meta.description}>
+  {page.sections.map((section) => (
+    section.enabled === false ? null :
+    section.type === 'projectList' ? <ProjectsGridSection config={section} /> :
+    null
+  ))}
 </MainLayout>
