@@ -1,7 +1,7 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import OperatingHomeSection from '@/components/sections/OperatingHomeSection.astro';
-import { getOperatingContent, getOperatingProjectPaths } from '@/utils/operatingContent';
+import { getOperatingBodyStyle, getOperatingContent, getOperatingProjectPaths } from '@/utils/operatingContent';
 
 export function getStaticPaths() {
   return getOperatingProjectPaths().map((projectPath) => ({
@@ -19,10 +19,7 @@ const navItems = [
     href: `#module-${index + 1}`
   }))
 ];
-const projectBackground = content.backgroundColor?.trim();
-const bodyStyle = projectBackground
-  ? `--ops-project-bg: ${projectBackground}; background: ${projectBackground};`
-  : '--ops-project-bg: transparent; background: Canvas;';
+const bodyStyle = getOperatingBodyStyle(content);
 ---
 
 <MainLayout
@@ -34,6 +31,10 @@ const bodyStyle = projectBackground
   showHeaderContacts={true}
   hideFooterContacts={true}
   bodyStyle={bodyStyle}
+  brandName={content.mainTitle}
+  brandIcon={content.icon}
+  brandHref={projectRoot}
+  faviconHref={content.icon}
 >
   <OperatingHomeSection content={content} />
 </MainLayout>

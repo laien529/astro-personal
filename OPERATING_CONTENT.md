@@ -24,7 +24,26 @@ SITE_PREVIEW_ORIGIN=https://你的域名 npm run config:studio
 
 配置台支持上传背景图、上传子项图片、预览已配置图片，也可以直接下载当前图片到本地。
 
-配置台也支持维护“社交媒体 / 联系方式”。这些链接会出现在页面右下角。
+Project 级也支持整页背景图。可以在配置台上传，也可以把图片放到：
+
+```text
+public/user-content/projects/path名/background.jpg
+```
+
+文件名可以是 `background.jpg`、`background.png`、`background.webp`、`background.svg` 等。
+
+如果背景图比较深、细节很多，配置台里可以打开“背景图弱化”。开启后页面会自动对整图做轻微虚化、提亮和柔和蒙层，让标题和正文更容易看清。
+
+Project 的标题视觉也可以在配置台维护，包括标题字体、主标题字号、副标题字号、模块标题字号、滚动卡片标题字号。配置台使用下拉选项，不需要理解数字和单位；选择后右侧会实时显示字体和字号示例。
+
+Project 也支持自己的页面 Icon。这个 icon 会同时用于：
+
+- 左上角名字前面的图标
+- 浏览器页签里的 favicon
+
+如果没有配置 icon，系统会自动用 Project 背景色加主标题首字母生成图案；中文会取主标题第一个汉字的拼音首字母。
+
+配置台也支持维护“社交媒体 / 联系方式”。这些链接会出现在页面左上角姓名右侧。
 
 联系方式里如果是邮箱，只填邮箱地址即可，配置台会自动生成邮件链接，不需要填写 `mailto:`。常见媒体会自动匹配图标：抖音、小红书、Instagram、X、大众点评、领英、GitHub、邮箱。
 
@@ -126,7 +145,15 @@ http://localhost:4321/chengkeying
 | --- | --- |
 | `projectName` | 配置台里看的项目名称 |
 | `path` | 访问路径，只用英文、数字、短横线，例如 `chengkeying` |
+| `icon` | 页面 Icon 路径，例如 `/user-content/projects/chengkeying/icon.png`；留空则自动生成 |
 | `backgroundColor` | Project 整体背景色，例如 `#f5f5f7`；留空则使用浏览器默认背景 |
+| `backgroundImage` | Project 整页背景图路径，例如 `/user-content/projects/chengkeying/background.jpg`；留空时会自动读取 project 文件夹里的 `background.*` |
+| `softenBackgroundImage` | 是否弱化整页背景图，建议深色或细节很多的背景图设为 `true` |
+| `titleFontFamily` | Project 标题字体，例如 `"SF Pro Display", "PingFang SC", sans-serif` |
+| `mainTitleFontSize` | 主标题字号，例如 `clamp(4.5rem, 9vw, 8rem)` |
+| `subtitleFontSize` | 副标题字号，例如 `20px` |
+| `moduleTitleFontSize` | 模块标题字号，例如 `clamp(3rem, 5vw, 5rem)` |
+| `itemTitleFontSize` | 滚动卡片/子项标题字号，例如 `clamp(1.5rem, 2.5vw, 2.6rem)` |
 | `mainTitle` | 主标题，例如姓名、品牌名、产品名 |
 | `mainTitleEn` | 英文主标题，可为空 |
 | `subtitle` | 副标题，例如职业定位、一句话口号 |
@@ -194,10 +221,24 @@ public/user-content/
                └─ 01.svg
 ```
 
+Project 整页背景图放在 project 根目录：
+
+```text
+public/user-content/projects/chengkeying/background.jpg
+```
+
+Project 页面 Icon 也放在 project 根目录：
+
+```text
+public/user-content/projects/chengkeying/icon.png
+```
+
 对应关系：
 
 | JSON 位置 | 图片文件夹 |
 | --- | --- |
+| `chengkeying` 的页面 Icon | `public/user-content/projects/chengkeying/icon.*` |
+| `chengkeying` 的整页背景图 | `public/user-content/projects/chengkeying/background.*` |
 | `chengkeying` 的第 1 个模块 | `public/user-content/projects/chengkeying/modules/module-01/` |
 | `chengkeying` 的第 1 个模块第 1 个子项 | `public/user-content/projects/chengkeying/modules/module-01/item-01/` |
 | `chengkeying` 的第 1 个模块第 2 个子项 | `public/user-content/projects/chengkeying/modules/module-01/item-02/` |

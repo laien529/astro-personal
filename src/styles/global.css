@@ -22,10 +22,38 @@
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
+  position: relative;
+  isolation: isolate;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--text);
   background: var(--body-background);
   line-height: 1.65;
+}
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+body::before {
+  z-index: 0;
+  background-image: var(--ops-project-bg-image, none);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: scale(var(--ops-project-bg-scale, 1));
+  filter: var(--ops-project-bg-filter, none);
+  opacity: var(--ops-project-bg-opacity, 1);
+  transform-origin: center;
+}
+body::after {
+  z-index: 0;
+  background: var(--ops-project-bg-overlay, transparent);
+}
+body > * {
+  position: relative;
+  z-index: 1;
 }
 a { color: inherit; text-decoration: none; }
 p { margin: 0 0 1rem; }
@@ -384,7 +412,7 @@ main { min-height: 70vh; }
 }
 
 .ops-project {
-  background: var(--ops-project-bg, transparent);
+  background-color: var(--ops-project-surface, var(--ops-project-bg, transparent));
 }
 
 .ops-title-section {
@@ -398,6 +426,7 @@ main { min-height: 70vh; }
   gap: 1rem;
   min-height: 75svh;
   max-width: 820px;
+  font-family: var(--ops-title-font-family, inherit);
 }
 
 .ops-title-shell h1,
@@ -408,7 +437,13 @@ main { min-height: 70vh; }
 
 .ops-title-subtitle {
   color: var(--primary-strong);
+  font-size: var(--ops-subtitle-size, 1rem);
   font-weight: 700;
+}
+
+.ops-title-shell h1 {
+  font-family: var(--ops-title-font-family, inherit);
+  font-size: var(--ops-main-title-size, inherit);
 }
 
 .ops-title-intro {
@@ -465,6 +500,11 @@ main { min-height: 70vh; }
   text-align: left;
 }
 
+.ops-module-header h2 {
+  font-family: var(--ops-title-font-family, inherit);
+  font-size: var(--ops-module-title-size, inherit);
+}
+
 .ops-item-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -509,6 +549,8 @@ main { min-height: 70vh; }
 }
 
 .ops-item-copy h3 {
+  font-family: var(--ops-title-font-family, inherit);
+  font-size: var(--ops-item-title-size, inherit);
   overflow-wrap: anywhere;
 }
 
@@ -946,7 +988,7 @@ main { min-height: 70vh; }
 }
 
 .style-apple .ops-project {
-  background: var(--ops-project-bg, transparent);
+  background-color: var(--ops-project-surface, var(--ops-project-bg, transparent));
 }
 
 .style-apple .ops-title-section {
@@ -962,8 +1004,15 @@ main { min-height: 70vh; }
   min-height: 75svh;
 }
 
+.style-apple .ops-title-shell h1 {
+  font-family: var(--ops-title-font-family, inherit);
+  font-size: var(--ops-main-title-size, clamp(3.5rem, 7vw, 6rem));
+}
+
 .style-apple .ops-title-subtitle {
   color: var(--muted);
+  font-family: var(--ops-title-font-family, inherit);
+  font-size: var(--ops-subtitle-size, 1rem);
   font-weight: 600;
 }
 
@@ -1017,6 +1066,11 @@ main { min-height: 70vh; }
   text-align: left;
 }
 
+.style-apple .ops-module-header h2 {
+  font-family: var(--ops-title-font-family, inherit);
+  font-size: var(--ops-module-title-size, clamp(2.7rem, 5vw, 4.5rem));
+}
+
 .style-apple .ops-scroll-region {
   margin-top: clamp(0.75rem, 1.6vw, 1.25rem);
   padding-bottom: 0;
@@ -1068,7 +1122,8 @@ main { min-height: 70vh; }
 }
 
 .style-apple .ops-item-copy h3 {
-  font-size: clamp(1.3rem, 2.3vw, 2.35rem);
+  font-family: var(--ops-title-font-family, inherit);
+  font-size: var(--ops-item-title-size, clamp(1.3rem, 2.3vw, 2.35rem));
 }
 
 .style-apple .ops-item-copy p {

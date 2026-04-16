@@ -1,7 +1,7 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import OperatingHomeSection from '@/components/sections/OperatingHomeSection.astro';
-import { getOperatingContent } from '@/utils/operatingContent';
+import { getOperatingBodyStyle, getOperatingContent } from '@/utils/operatingContent';
 
 const content = getOperatingContent();
 const navItems = [
@@ -11,10 +11,7 @@ const navItems = [
     href: `#module-${index + 1}`
   }))
 ];
-const projectBackground = content.backgroundColor?.trim();
-const bodyStyle = projectBackground
-  ? `--ops-project-bg: ${projectBackground}; background: ${projectBackground};`
-  : '--ops-project-bg: transparent; background: Canvas;';
+const bodyStyle = getOperatingBodyStyle(content);
 ---
 
 <MainLayout
@@ -26,6 +23,10 @@ const bodyStyle = projectBackground
   showHeaderContacts={true}
   hideFooterContacts={true}
   bodyStyle={bodyStyle}
+  brandName={content.mainTitle}
+  brandIcon={content.icon}
+  brandHref="/"
+  faviconHref={content.icon}
 >
   <OperatingHomeSection content={content} />
 </MainLayout>

@@ -1,13 +1,13 @@
 ---
 import Container from '@/components/ui/Container.astro';
-import type { ResolvedOperatingContent } from '@/utils/operatingContent';
+import { getOperatingProjectCssVars, type ResolvedOperatingContent } from '@/utils/operatingContent';
 
 interface Props {
   content: ResolvedOperatingContent;
 }
 
 const { content } = Astro.props;
-const projectStyle = content.backgroundColor ? `--ops-project-bg: ${content.backgroundColor};` : undefined;
+const projectStyle = getOperatingProjectCssVars(content) || undefined;
 ---
 
 <div class="ops-project" style={projectStyle}>

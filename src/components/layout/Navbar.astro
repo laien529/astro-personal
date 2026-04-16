@@ -14,10 +14,20 @@ interface Props {
   }[];
   showLanguageToggle?: boolean;
   showHeaderContacts?: boolean;
+  brandName?: string;
+  brandIcon?: string;
+  brandHref?: string;
 }
 
 const pathname = Astro.url.pathname;
-const { navItems = navigation, showLanguageToggle = false, showHeaderContacts = false } = Astro.props;
+const {
+  navItems = navigation,
+  showLanguageToggle = false,
+  showHeaderContacts = false,
+  brandName = siteConfig.name,
+  brandIcon = assetConfig.icons.brand,
+  brandHref = '/'
+} = Astro.props;
 const contactLinks = getOperatingContactLinks(siteConfig.footer.contactLinks);
 ---
 
@@ -25,9 +35,9 @@ const contactLinks = getOperatingContactLinks(siteConfig.footer.contactLinks);
   <Container>
     <div class="site-header-inner">
       <div class="brand-stack">
-        <a class="brand" href="/">
-          {assetConfig.icons.brand && <img class="brand-icon" src={assetConfig.icons.brand} alt="" />}
-          <span>{siteConfig.name}</span>
+        <a class="brand" href={brandHref}>
+          {brandIcon && <img class="brand-icon" src={brandIcon} alt="" />}
+          <span>{brandName}</span>
         </a>
         {showHeaderContacts && (
           <>

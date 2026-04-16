@@ -124,14 +124,22 @@ function legacyConfig() {
       {
         projectName: content.projectName || content.mainTitle || 'Project',
         path,
+        icon: content.icon || '',
         backgroundColor: content.backgroundColor || '',
+        backgroundImage: content.backgroundImage || '',
+        softenBackgroundImage: Boolean(content.softenBackgroundImage),
+        titleFontFamily: content.titleFontFamily || '',
+        mainTitleFontSize: content.mainTitleFontSize || '',
+        subtitleFontSize: content.subtitleFontSize || '',
+        moduleTitleFontSize: content.moduleTitleFontSize || '',
+        itemTitleFontSize: content.itemTitleFontSize || '',
         mainTitle: content.mainTitle || '',
-      mainTitleEn: content.mainTitleEn || '',
-      subtitle: content.subtitle || '',
-      subtitleEn: content.subtitleEn || '',
-      intro: content.intro || '',
-      introEn: content.introEn || '',
-      modules: Array.isArray(content.modules) ? content.modules : []
+        mainTitleEn: content.mainTitleEn || '',
+        subtitle: content.subtitle || '',
+        subtitleEn: content.subtitleEn || '',
+        intro: content.intro || '',
+        introEn: content.introEn || '',
+        modules: Array.isArray(content.modules) ? content.modules : []
       }
     ]
   };
@@ -183,7 +191,17 @@ function validateConfig(config) {
     return {
       projectName: String(project?.projectName || project?.mainTitle || `Project ${index + 1}`),
       path,
+      icon: String(project?.icon ?? ''),
       backgroundColor: String(project?.backgroundColor ?? ''),
+      backgroundImage: String(project?.backgroundImage ?? ''),
+      softenBackgroundImage:
+        project?.softenBackgroundImage === true ||
+        String(project?.softenBackgroundImage ?? '').trim().toLowerCase() === 'true',
+      titleFontFamily: String(project?.titleFontFamily ?? ''),
+      mainTitleFontSize: String(project?.mainTitleFontSize ?? ''),
+      subtitleFontSize: String(project?.subtitleFontSize ?? ''),
+      moduleTitleFontSize: String(project?.moduleTitleFontSize ?? ''),
+      itemTitleFontSize: String(project?.itemTitleFontSize ?? ''),
       mainTitle: String(project?.mainTitle ?? ''),
       mainTitleEn: String(project?.mainTitleEn ?? ''),
       subtitle: String(project?.subtitle ?? ''),
@@ -240,6 +258,8 @@ function getManifest(config = readConfig()) {
   return {
     projects: config.projects.map((project, projectIndex) => ({
       backgroundRoot: toPublicPath(projectDir(project)),
+      iconImages: listImages(projectDir(project)).filter((path) => path.includes('/icon.')),
+      backgroundImages: listImages(projectDir(project)).filter((path) => path.includes('/background.')),
       modules: project.modules.map((module, moduleIndex) => {
         const backgroundImages = listImages(moduleDir(project, moduleIndex)).filter((path) => path.includes('/background.'));
 
@@ -391,6 +411,38 @@ function uploadImage(payload) {
     throw new Error('Invalid project index.');
   }
 
+  if (payload.kind === 'projectIcon') {
+    const folder = projectDir(project);
+    ensureDir(folder);
+    listImages(folder)
+      .filter((path) => path.includes('/icon.'))
+      .forEach((path) => rmSync(safeUserContentPath(path), { force: true }));
+
+    const outputPath = join(folder, `icon${extension}`);
+    writeFileSync(outputPath, buffer);
+    project.icon = toPublicPath(outputPath);
+    writeConfig(config);
+
+    const nextConfig = readConfig();
+    return { path: toPublicPath(outputPath), config: nextConfig, manifest: getManifest(nextConfig) };
+  }
+
+  if (payload.kind === 'projectBackground') {
+    const folder = projectDir(project);
+    ensureDir(folder);
+    listImages(folder)
+      .filter((path) => path.includes('/background.'))
+      .forEach((path) => rmSync(safeUserContentPath(path), { force: true }));
+
+    const outputPath = join(folder, `background${extension}`);
+    writeFileSync(outputPath, buffer);
+    project.backgroundImage = toPublicPath(outputPath);
+    writeConfig(config);
+
+    const nextConfig = readConfig();
+    return { path: toPublicPath(outputPath), config: nextConfig, manifest: getManifest(nextConfig) };
+  }
+
   if (!Number.isInteger(moduleIndex) || moduleIndex < 0 || moduleIndex >= project.modules.length) {
     throw new Error('Invalid module index.');
   }
@@ -433,6 +485,14 @@ function deleteImage(payload) {
   rmSync(safeUserContentPath(path), { force: true });
 
   config.projects.forEach((project) => {
+    if (project.icon === path) {
+      project.icon = '';
+    }
+
+    if (project.backgroundImage === path) {
+      project.backgroundImage = '';
+    }
+
     project.modules.forEach((module) => {
       if (module.backgroundImage === path) {
         module.backgroundImage = '';
@@ -670,6 +730,35 @@ const page = String.raw`<!doctype html>
       .split { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; }
       .preview { display: grid; gap: 10px; align-content: start; }
       .preview img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 14px; border: 1px solid var(--line); background: #f5f5f7; }
+      .visual-settings { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr); gap: 16px; align-items: start; }
+      .type-controls { display: grid; gap: 16px; }
+      .type-preview {
+        display: grid;
+        gap: 12px;
+        min-height: 100%;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px;
+        background: linear-gradient(180deg, #fff, #f7f7f8);
+        overflow: hidden;
+      }
+      .type-preview-label {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      }
+      .type-preview-main,
+      .type-preview-subtitle,
+      .type-preview-module,
+      .type-preview-item {
+        margin: 0;
+        line-height: 1.05;
+        word-break: break-word;
+      }
+      .type-preview-subtitle { color: var(--muted); }
+      .type-preview-module { margin-top: 8px; }
+      .type-preview-item { color: #3a3a3c; }
       .file { display: block; width: 100%; border: 1px dashed var(--line); border-radius: 12px; padding: 12px; background: #fafafa; }
       .items { display: grid; gap: 14px; margin-top: 16px; }
       .item { border: 1px solid var(--line); border-radius: 16px; padding: 16px; background: #fbfbfd; }
@@ -703,7 +792,7 @@ const page = String.raw`<!doctype html>
       .empty { border: 1px dashed var(--line); border-radius: 12px; padding: 18px; text-align: center; color: var(--muted); background: #fff; }
       pre { white-space: pre-wrap; max-height: 320px; overflow: auto; border-radius: 14px; padding: 14px; background: #111; color: #eee; }
       @media (max-width: 860px) {
-        .hero, .split, .item-grid, .contact-row { grid-template-columns: 1fr; }
+        .hero, .split, .item-grid, .contact-row, .visual-settings { grid-template-columns: 1fr; }
         .topbar-inner { align-items: flex-start; flex-direction: column; padding: 12px 0; }
         .actions { justify-content: flex-start; }
       }
@@ -750,7 +839,7 @@ const page = String.raw`<!doctype html>
 
       function setStatus(message) { statusEl.textContent = message; }
       function activeProject() { return config.projects[activeProjectIndex]; }
-      function activeManifest() { return manifest.projects[activeProjectIndex] || { modules: [] }; }
+      function activeManifest() { return manifest.projects[activeProjectIndex] || { iconImages: [], backgroundImages: [], modules: [] }; }
       function normalizePath(value) {
         return String(value || '').trim().replace(/^\/+|\/+$/g, '').toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '').replace(/-{2,}/g, '-');
       }
@@ -775,6 +864,113 @@ const page = String.raw`<!doctype html>
       function escapeHtml(value) {
         return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
       }
+      const fontPresets = [
+        { label: '跟随当前风格', value: '', note: '使用当前 style 默认字体。' },
+        { label: '苹果官网感', value: '"SF Pro Display", "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif', note: '干净、现代，适合产品展示。' },
+        { label: '中文黑体稳重', value: '"PingFang SC", "Microsoft YaHei", Arial, sans-serif', note: '清晰稳重，适合中文内容。' },
+        { label: '杂志宋体感', value: '"Songti SC", "Noto Serif CJK SC", "Times New Roman", serif', note: '更像杂志标题，有文艺感。' },
+        { label: '圆润亲和', value: '"Arial Rounded MT Bold", "PingFang SC", "Microsoft YaHei", sans-serif', note: '更柔和，适合生活方式项目。' }
+      ];
+      const sizePresets = {
+        mainTitleFontSize: [
+          { label: '跟随当前风格', value: '', note: '使用当前 style 默认主标题大小。' },
+          { label: '标准', value: 'clamp(3.5rem, 7vw, 6rem)', note: '适合大多数项目首页。' },
+          { label: '大', value: 'clamp(4.5rem, 9vw, 8rem)', note: '更接近苹果首页的大标题。' },
+          { label: '超大', value: 'clamp(5.5rem, 11vw, 9.5rem)', note: '强视觉冲击，适合标题较短时使用。' }
+        ],
+        subtitleFontSize: [
+          { label: '跟随当前风格', value: '', note: '使用当前 style 默认副标题大小。' },
+          { label: '小', value: '16px', note: '克制、轻量。' },
+          { label: '标准', value: 'clamp(1rem, 1.4vw, 1.2rem)', note: '常规说明文字大小。' },
+          { label: '大', value: 'clamp(1.05rem, 1.6vw, 1.35rem)', note: '当前推荐值，醒目但不抢标题。' }
+        ],
+        moduleTitleFontSize: [
+          { label: '跟随当前风格', value: '', note: '使用当前 style 默认模块标题大小。' },
+          { label: '标准', value: 'clamp(2.7rem, 5vw, 4.5rem)', note: '适合常规模块。' },
+          { label: '大', value: 'clamp(3.2rem, 5.8vw, 5.2rem)', note: '模块标题更像产品页标题。' },
+          { label: '超大', value: 'clamp(3.8rem, 7vw, 6rem)', note: '适合模块很少、想强化视觉节奏。' }
+        ],
+        itemTitleFontSize: [
+          { label: '跟随当前风格', value: '', note: '使用当前 style 默认卡片标题大小。' },
+          { label: '标准', value: 'clamp(1.3rem, 2.3vw, 2.35rem)', note: '适合卡片内容较多时。' },
+          { label: '大', value: 'clamp(1.55rem, 2.7vw, 2.65rem)', note: '当前推荐值，卡片标题更突出。' },
+          { label: '超大', value: 'clamp(1.8rem, 3.2vw, 3rem)', note: '适合标题短、图片主导的卡片。' }
+        ]
+      };
+      const previewFallbacks = {
+        titleFontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", Arial, sans-serif',
+        mainTitleFontSize: '64px',
+        subtitleFontSize: '18px',
+        moduleTitleFontSize: '44px',
+        itemTitleFontSize: '28px'
+      };
+      function cleanCssValue(value) {
+        return String(value || '').replace(/[;{}]/g, '').trim();
+      }
+      function selectedPreset(options, value) {
+        return options.find((option) => option.value === String(value || '')) || { label: '当前自定义', value: String(value || ''), note: '这是已有配置值；重新选择后会保存为预设。' };
+      }
+      function renderPresetSelect(field, label, options, value) {
+        const selected = selectedPreset(options, value);
+        const list = options.some((option) => option.value === String(value || '')) ? options : [selected, ...options];
+        return [
+          '<div class="field">',
+          '<label>' + escapeHtml(label) + '</label>',
+          '<select data-scope="project" data-field="' + escapeHtml(field) + '">',
+          list.map((option) => '<option value="' + escapeHtml(option.value) + '"' + (option.value === String(value || '') ? ' selected' : '') + '>' + escapeHtml(option.label) + '</option>').join(''),
+          '</select>',
+          '<div class="small" data-preset-note="' + escapeHtml(field) + '">' + escapeHtml(selected.note) + '</div>',
+          '</div>'
+        ].join('');
+      }
+      function projectPreviewStyles(project) {
+        return {
+          titleFontFamily: cleanCssValue(project.titleFontFamily) || previewFallbacks.titleFontFamily,
+          mainTitleFontSize: cleanCssValue(project.mainTitleFontSize) || previewFallbacks.mainTitleFontSize,
+          subtitleFontSize: cleanCssValue(project.subtitleFontSize) || previewFallbacks.subtitleFontSize,
+          moduleTitleFontSize: cleanCssValue(project.moduleTitleFontSize) || previewFallbacks.moduleTitleFontSize,
+          itemTitleFontSize: cleanCssValue(project.itemTitleFontSize) || previewFallbacks.itemTitleFontSize
+        };
+      }
+      function renderTypographyPreview(project) {
+        const styles = projectPreviewStyles(project);
+        return [
+          '<div class="type-preview" data-type-preview style="font-family: ' + escapeHtml(styles.titleFontFamily) + ';">',
+          '<p class="type-preview-label">字体 / 字号实时预览</p>',
+          '<p class="type-preview-subtitle" data-preview-subtitle style="font-size: ' + escapeHtml(styles.subtitleFontSize) + ';">' + escapeHtml(project.subtitle || '副标题示例') + '</p>',
+          '<p class="type-preview-main" data-preview-main style="font-size: ' + escapeHtml(styles.mainTitleFontSize) + ';">' + escapeHtml(project.mainTitle || '主标题示例') + '</p>',
+          '<p class="type-preview-module" data-preview-module style="font-size: ' + escapeHtml(styles.moduleTitleFontSize) + ';">模块标题示例</p>',
+          '<p class="type-preview-item" data-preview-item style="font-size: ' + escapeHtml(styles.itemTitleFontSize) + ';">滚动卡片标题示例</p>',
+          '</div>'
+        ].join('');
+      }
+      function refreshTypographyPreview() {
+        const project = activeProject();
+        const preview = app.querySelector('[data-type-preview]');
+        if (!project || !preview) return;
+        const styles = projectPreviewStyles(project);
+        preview.style.fontFamily = styles.titleFontFamily;
+        const subtitle = preview.querySelector('[data-preview-subtitle]');
+        const main = preview.querySelector('[data-preview-main]');
+        const moduleTitle = preview.querySelector('[data-preview-module]');
+        const itemTitle = preview.querySelector('[data-preview-item]');
+        if (subtitle) {
+          subtitle.textContent = project.subtitle || '副标题示例';
+          subtitle.style.fontSize = styles.subtitleFontSize;
+        }
+        if (main) {
+          main.textContent = project.mainTitle || '主标题示例';
+          main.style.fontSize = styles.mainTitleFontSize;
+        }
+        if (moduleTitle) moduleTitle.style.fontSize = styles.moduleTitleFontSize;
+        if (itemTitle) itemTitle.style.fontSize = styles.itemTitleFontSize;
+        app.querySelectorAll('[data-preset-note]').forEach((note) => {
+          const field = note.dataset.presetNote;
+          const options = field === 'titleFontFamily' ? fontPresets : sizePresets[field];
+          if (!options) return;
+          note.textContent = selectedPreset(options, project[field]).note;
+        });
+      }
       async function api(path, options = {}) {
         const response = await fetch(path, { headers: { 'content-type': 'application/json' }, ...options });
         const data = await response.json();
@@ -790,7 +986,12 @@ const page = String.raw`<!doctype html>
           contact.href = normalizeContactHrefForEditor(contact);
         }
         if (scope === 'project') {
-          activeProject()[field] = field === 'path' ? normalizePath(target.value) : target.value;
+          activeProject()[field] =
+            field === 'path'
+              ? normalizePath(target.value)
+              : field === 'softenBackgroundImage'
+                ? target.value === 'true'
+                : target.value;
           if (field === 'projectName' && !activeProject().mainTitle) activeProject().mainTitle = target.value;
         }
         if (scope === 'module') activeProject().modules[Number(moduleIndex)][field] = target.value;
@@ -804,6 +1005,9 @@ const page = String.raw`<!doctype html>
         if (!Array.isArray(config.contactLinks)) config.contactLinks = [];
         if (activeProjectIndex >= config.projects.length) activeProjectIndex = 0;
         const project = activeProject();
+        const projectManifest = activeManifest();
+        const projectIcon = project.icon || projectManifest.iconImages?.[0] || '';
+        const projectBackground = project.backgroundImage || projectManifest.backgroundImages?.[0] || '';
         const projectUrl = '/' + project.path;
         const absoluteProjectUrl = previewOrigin.replace(/\/$/, '') + projectUrl;
         app.innerHTML = [
@@ -813,7 +1017,21 @@ const page = String.raw`<!doctype html>
           '<div class="field"><label>默认 Project</label><select data-scope="config" data-field="defaultProjectPath">' + config.projects.map((project) => '<option value="' + escapeHtml(project.path) + '"' + (config.defaultProjectPath === project.path ? ' selected' : '') + '>' + escapeHtml(project.projectName || project.path) + ' /' + escapeHtml(project.path) + '</option>').join('') + '</select></div>',
           '<div class="field"><label>projectName Project 名称</label><input type="text" data-scope="project" data-field="projectName" value="' + escapeHtml(project.projectName) + '"></div>',
           '<div class="field"><label>path 访问路径，只填英文、数字、短横线</label><input type="text" data-scope="project" data-field="path" value="' + escapeHtml(project.path) + '"><div class="small">访问 URL：<a href="' + escapeHtml(absoluteProjectUrl) + '" target="_blank">' + escapeHtml(absoluteProjectUrl) + '</a></div></div>',
+          '<div class="field"><label>icon 页面 Icon 路径</label><input type="text" data-scope="project" data-field="icon" value="' + escapeHtml(project.icon || '') + '"><div class="small">用于左上角图标和浏览器页签 icon。留空会按背景色 + 主标题首字母自动生成。</div></div>',
+          '<div class="preview">' + (projectIcon ? '<img src="' + escapeHtml(projectIcon) + '?v=' + Date.now() + '" alt="Project Icon 预览"><a class="download-link" href="' + escapeHtml(projectIcon) + '" download>下载页面 Icon</a>' : '<div class="empty">未配置 icon，将自动生成首字母图标。</div>') + '<label class="file">上传页面 Icon<input type="file" accept="image/*" data-kind="projectIcon"></label></div>',
           '<div class="field"><label>backgroundColor Project 整体背景色，可填 #f5f5f7 / rgb(...) / transparent；留空则使用浏览器默认背景</label><input type="text" data-scope="project" data-field="backgroundColor" value="' + escapeHtml(project.backgroundColor || '') + '"></div>',
+          '<div class="field"><label>backgroundImage Project 整页背景图路径</label><input type="text" data-scope="project" data-field="backgroundImage" value="' + escapeHtml(project.backgroundImage || '') + '"><div class="small">也可以只上传图片，系统会保存到 /user-content/projects/' + escapeHtml(project.path) + '/background.*</div></div>',
+          '<div class="preview">' + (projectBackground ? '<img src="' + escapeHtml(projectBackground) + '?v=' + Date.now() + '" alt="Project 背景图预览"><a class="download-link" href="' + escapeHtml(projectBackground) + '" download>下载整页背景图</a>' : '<div class="empty">暂无整页背景图</div>') + '<label class="file">上传 Project 整页背景图<input type="file" accept="image/*" data-kind="projectBackground"></label></div>',
+          '<div class="field"><label>背景图弱化</label><select data-scope="project" data-field="softenBackgroundImage"><option value="false"' + (project.softenBackgroundImage ? '' : ' selected') + '>关闭，保留原图</option><option value="true"' + (project.softenBackgroundImage ? ' selected' : '') + '>开启，自动弱化</option></select><div class="small">适合深色或细节很多的背景图。开启后会自动做轻微虚化、提亮和玻璃感蒙层，让文字和内容更容易看清。</div></div>',
+          '<div class="visual-settings"><div class="type-controls">',
+          renderPresetSelect('titleFontFamily', '标题字体', fontPresets, project.titleFontFamily),
+          renderPresetSelect('mainTitleFontSize', '主标题字号', sizePresets.mainTitleFontSize, project.mainTitleFontSize),
+          renderPresetSelect('subtitleFontSize', '副标题字号', sizePresets.subtitleFontSize, project.subtitleFontSize),
+          renderPresetSelect('moduleTitleFontSize', '模块标题字号', sizePresets.moduleTitleFontSize, project.moduleTitleFontSize),
+          renderPresetSelect('itemTitleFontSize', '滚动卡片标题字号', sizePresets.itemTitleFontSize, project.itemTitleFontSize),
+          '</div>',
+          renderTypographyPreview(project),
+          '</div>',
           '<div class="field"><label>mainTitle 主标题</label><input type="text" data-scope="project" data-field="mainTitle" value="' + escapeHtml(project.mainTitle) + '"></div>',
           '<div class="field"><label>mainTitleEn 英文主标题</label><input type="text" data-scope="project" data-field="mainTitleEn" value="' + escapeHtml(project.mainTitleEn || '') + '"></div>',
           '<div class="field"><label>subtitle 副标题</label><input type="text" data-scope="project" data-field="subtitle" value="' + escapeHtml(project.subtitle) + '"></div>',
@@ -826,8 +1044,14 @@ const page = String.raw`<!doctype html>
         ].join('');
 
         app.querySelectorAll('input[type="text"], textarea, select').forEach((input) => {
-          input.addEventListener('input', () => syncInput(input));
-          input.addEventListener('change', () => syncInput(input));
+          input.addEventListener('input', () => {
+            syncInput(input);
+            refreshTypographyPreview();
+          });
+          input.addEventListener('change', () => {
+            syncInput(input);
+            refreshTypographyPreview();
+          });
         });
         app.querySelectorAll('[data-action]').forEach((button) => button.addEventListener('click', () => handleAction(button)));
         app.querySelectorAll('input[type="file"]').forEach((input) => input.addEventListener('change', () => handleUpload(input)));
@@ -903,7 +1127,7 @@ const page = String.raw`<!doctype html>
       }
       function newProject() {
         const next = config ? config.projects.length + 1 : 1;
-        return { projectName: '新 Project ' + next, path: 'project-' + String(next).padStart(2, '0'), backgroundColor: '', mainTitle: '新 Project ' + next, mainTitleEn: '', subtitle: '填写副标题', subtitleEn: '', intro: '填写介绍文案。', introEn: '', modules: [] };
+        return { projectName: '新 Project ' + next, path: 'project-' + String(next).padStart(2, '0'), icon: '', backgroundColor: '', backgroundImage: '', softenBackgroundImage: false, titleFontFamily: '', mainTitleFontSize: '', subtitleFontSize: '', moduleTitleFontSize: '', itemTitleFontSize: '', mainTitle: '新 Project ' + next, mainTitleEn: '', subtitle: '填写副标题', subtitleEn: '', intro: '填写介绍文案。', introEn: '', modules: [] };
       }
       function move(array, from, to) {
         if (to < 0 || to >= array.length) return;

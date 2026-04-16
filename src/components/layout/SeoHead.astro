@@ -5,9 +5,10 @@ import { assetConfig } from '@/data/assets';
 interface Props {
   title: string;
   description?: string;
+  faviconHref?: string;
 }
 
-const { title, description = siteConfig.description } = Astro.props;
+const { title, description = siteConfig.description, faviconHref = assetConfig.icons.favicon } = Astro.props;
 const canonical = new URL(Astro.url.pathname, siteConfig.siteUrl).toString();
 ---
 
@@ -21,4 +22,4 @@ const canonical = new URL(Astro.url.pathname, siteConfig.siteUrl).toString();
 <meta property="og:type" content="website" />
 <meta property="og:url" content={canonical} />
 <meta property="og:site_name" content={siteConfig.name} />
-<link rel="icon" href={assetConfig.icons.favicon} />
+<link rel="icon" href={faviconHref} />

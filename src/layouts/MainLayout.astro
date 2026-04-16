@@ -19,6 +19,10 @@ interface Props {
   showHeaderContacts?: boolean;
   hideFooterContacts?: boolean;
   bodyStyle?: string;
+  brandName?: string;
+  brandIcon?: string;
+  brandHref?: string;
+  faviconHref?: string;
 }
 
 const {
@@ -29,7 +33,11 @@ const {
   showLanguageToggle = false,
   showHeaderContacts = false,
   hideFooterContacts = false,
-  bodyStyle
+  bodyStyle,
+  brandName = siteConfig.name,
+  brandIcon,
+  brandHref = '/',
+  faviconHref
 } = Astro.props;
 const themeCss = getThemeCss();
 const styleClass = getStyleClass();
@@ -39,11 +47,18 @@ const styleName = getStyleName();
 <!doctype html>
 <html lang={language}>
   <head>
-    <SeoHead title={title} description={description} />
+    <SeoHead title={title} description={description} faviconHref={faviconHref} />
     <style is:inline set:html={themeCss}></style>
   </head>
   <body class={styleClass} data-style={styleName} style={bodyStyle}>
-    <Navbar navItems={navItems} showLanguageToggle={showLanguageToggle} showHeaderContacts={showHeaderContacts} />
+    <Navbar
+      navItems={navItems}
+      showLanguageToggle={showLanguageToggle}
+      showHeaderContacts={showHeaderContacts}
+      brandName={brandName}
+      brandIcon={brandIcon}
+      brandHref={brandHref}
+    />
     <main>
       <slot />
     </main>

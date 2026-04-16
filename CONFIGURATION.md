@@ -4,6 +4,22 @@
 
 如果是普通运营用户维护首页内容，优先看 `OPERATING_CONTENT.md`，只需要改 `content/site-projects.json` 和 `public/user-content/`。
 
+Project 页面还支持单个 project 自己的整页背景图和标题视觉配置。常用字段在 `content/site-projects.json` 的每个 project 内：
+
+- `icon`：页面 icon，同时用于左上角品牌图标和浏览器页签 favicon；留空则自动生成。
+- `backgroundColor`：整页底色。
+- `backgroundImage`：整页背景图路径，也可以放 `public/user-content/projects/path名/background.*` 让工程自动读取。
+- `softenBackgroundImage`：是否自动弱化整页背景图；开启后会做轻微虚化、提亮和蒙层，优先保证文字可读性。
+- `titleFontFamily`：Project 页面标题字体，配置台里通过下拉选项维护。
+- `mainTitleFontSize`：主标题字号，配置台里通过下拉选项维护。
+- `subtitleFontSize`：副标题字号，配置台里通过下拉选项维护。
+- `moduleTitleFontSize`：模块标题字号，配置台里通过下拉选项维护。
+- `itemTitleFontSize`：滚动卡片/子项标题字号，配置台里通过下拉选项维护。
+
+配置台会在这些下拉项右侧显示实时预览，运营用户不需要直接填写 `px`、`rem` 或 `clamp(...)`。
+
+未配置 `icon` 时，工程会自动用 project 背景色和主标题首字母生成图标；中文标题会尝试取首个汉字的拼音首字母。
+
 ## 适配结论
 
 改造前：不完全适配。项目已有 `src/data/site.ts`、`navigation.ts`、`socials.ts`、`skills.ts` 和 Markdown 项目集合，但区块顺序、区块文案、主题变量、背景图、icon、图片、视频入口仍散落在组件和 CSS 中。
@@ -74,7 +90,7 @@ export const siteConfig = {
 };
 ```
 
-`footer.contactLinks` 会渲染在 project 页面右下角。新增、删除或调整顺序都只改这个数组即可。
+`footer.contactLinks` 可作为默认联系方式；project 页面会优先读取运营配置里的 `contactLinks`，展示在左上角姓名右侧。新增、删除或调整顺序都只改这个数组即可。
 
 上线前务必同步：
 
